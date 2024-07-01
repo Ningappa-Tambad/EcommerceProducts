@@ -2,6 +2,7 @@ package com.springacademy.productservicejune24.models;
 
 import java.util.Date;
 
+
 public class BaseModel
 {
     private long id;
