@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 public class Product extends BaseModel {
 
-   private Long id;
+    private Long id;
     private String title;
     private double price;
     private Category category;
