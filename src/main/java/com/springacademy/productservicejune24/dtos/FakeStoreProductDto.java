@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Setter
 public class FakeStoreProductDto
 {
-    private Long id;
+    private long id;
     private String title;
     private double price;
     private String category;

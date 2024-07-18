@@ -1,7 +1,9 @@
 package com.springacademy.productservicejune24.Controller;
 
 import com.springacademy.productservicejune24.Services.ProductService;
+import com.springacademy.productservicejune24.exceptions.ProductNotFoundException;
 import com.springacademy.productservicejune24.models.Product;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -16,32 +18,37 @@ public class ProductController
 
     private ProductService productService;
 
-    public ProductController(ProductService productService)
+    public ProductController(@Qualifier("selfProductService") ProductService productService)
     {
         this.productService = productService;
     }
 
     //http::localhost:8080/products/10
     @GetMapping("/{id}")
-   public ResponseEntity<Product> getProductById(@PathVariable("id") long id) {
+   public ResponseEntity<Product> getProductById(@PathVariable("id") long id) throws ProductNotFoundException {
 
-        ResponseEntity<Product> responseEntity = null;
+//        ResponseEntity<Product> responseEntity = null;
+//
+//        try {
+//
+//          //  Product product = productService.getSingleProduct(id);
+//            responseEntity = new ResponseEntity<>(
+//                    product,
+//                    HttpStatus.OK
+//            );
+//
+//        }
+//        catch(RuntimeException e)
+//        {
+//            responseEntity = new ResponseEntity<>(
+//                    HttpStatus.NOT_FOUND);
+//        }
 
-        try {
-
-            Product product = productService.getSingleProduct(id);
-            responseEntity = new ResponseEntity<>(
-                    product,
-                    HttpStatus.OK
-            );
-
-        }
-        catch(RuntimeException e)
-        {
-            responseEntity = new ResponseEntity<>(
-                    HttpStatus.NOT_FOUND);
-        }
-        return responseEntity;
+        ResponseEntity<Product> response=new ResponseEntity<>(
+                productService.getSingleProduct(id),
+                HttpStatus.OK
+        );
+        return response;
 
        //throw new RuntimeException("Something went wrong");
    }
@@ -85,6 +92,29 @@ public class ProductController
         return null;
     }
 
+    @ExceptionHandler(ArithmeticException.class)
+    public ResponseEntity<String> handleAirthmaticException()
+    {
+        ResponseEntity<String> response=new ResponseEntity<>("Arithmetic exception happened inside controller",
+                HttpStatus.NOT_FOUND
+        );
+        return response;
+    }
+
+
+    //Implementing product API using product DB
+    @PostMapping
+     public Product addNewProduct(@RequestBody Product product)
+     {
+
+         return productService.addProduct(product);
+   }
+
+     @DeleteMapping("/{id}")
+    public void deleteProduct(@PathVariable("id") Long productId)
+    {
+        productService.deleteProduct(productId);
+    }
 
 
 

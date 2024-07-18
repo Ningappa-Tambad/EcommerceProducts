@@ -1,8 +1,10 @@
 package com.springacademy.productservicejune24.Services;
 
 import com.springacademy.productservicejune24.dtos.FakeStoreProductDto;
+import com.springacademy.productservicejune24.exceptions.ProductNotFoundException;
 import com.springacademy.productservicejune24.models.Category;
 import com.springacademy.productservicejune24.models.Product;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpMessageConverterExtractor;
@@ -12,7 +14,8 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
+@Service("fakeStoreProductService")
+//@Primary
 public class FakeStoreProductService implements ProductService{
 
     private RestTemplate restTemplate;
@@ -24,13 +27,18 @@ public class FakeStoreProductService implements ProductService{
 
 
     @Override
-    public Product getSingleProduct(long productId) {
+    public Product getSingleProduct(long productId) throws ProductNotFoundException {
 
         //Call fakestore product service to fetch product with given id ==> HTTP
 
      FakeStoreProductDto fakeStoreProductDto= restTemplate.getForObject(
               "https://fakestoreapi.com/products/" + productId + "/", FakeStoreProductDto.class
       );
+
+     if(fakeStoreProductDto==null)
+     {
+         throw new ProductNotFoundException("Product with id" + productId + "doesn't exist");
+     }
 
      //Convert FakeStoreProductDto into Product
 
@@ -74,6 +82,16 @@ public class FakeStoreProductService implements ProductService{
     @Override
     public Product ReplaceProduct(Long id, Product product) {
         return null;
+    }
+
+    @Override
+    public Product addProduct(Product product) {
+        return null;
+    }
+
+    @Override
+    public void deleteProduct(Long id) {
+
     }
 
     private Product convertFakeStoreProductToProduct(FakeStoreProductDto fakeStoreProductDto) {
