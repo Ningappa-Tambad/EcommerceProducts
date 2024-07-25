@@ -94,6 +94,11 @@ public class FakeStoreProductService implements ProductService{
 
     }
 
+    @Override
+    public Product UpdateDbProduct(Long id, Product product) {
+        return null;
+    }
+
     private Product convertFakeStoreProductToProduct(FakeStoreProductDto fakeStoreProductDto) {
 
         Product product = new Product();

@@ -18,7 +18,7 @@ public class SelfProductService implements ProductService{
    private ProductRepository productRepository;
    private CategoryRepository categoryRepository;
 
-
+    //Implement product API's using DB
    public SelfProductService(ProductRepository productRepository,
                              CategoryRepository categoryRepository)
    {
@@ -50,18 +50,10 @@ public class SelfProductService implements ProductService{
     }
 
     @Override
-    public Product UpdateProduct(Long id, Product product) {
+    public Product UpdateProduct(Long id, Product product) throws ProductNotFoundException {
         return null;
     }
 
-    @Override
-    public Product ReplaceProduct(Long id, Product product) {
-        return null;
-    }
-
-
-
-    //Implement product API's using DB
 
     @Override
     public Product addProduct(Product product) {
@@ -84,6 +76,40 @@ public class SelfProductService implements ProductService{
 
 
       productRepository.deleteById(id);
+    }
+
+    //PATCH method
+
+    @Override
+    public Product UpdateDbProduct(Long id, Product product) throws ProductNotFoundException
+    {
+        Optional<Product> productOptional = productRepository.findById(id);
+        if(productOptional.isEmpty())
+        {
+            throw new ProductNotFoundException("Product with id" + id + "doesn't exist");
+
+           
+        }
+
+        Product productToUpdate = productOptional.get();
+
+        if(product.getTitle()!= null)
+        {
+            productToUpdate.setTitle(product.getTitle());
+        }
+
+        if(product.getPrice() != null)
+        {
+            productToUpdate.setPrice(product.getPrice());
+        }
+        return productRepository.save(productToUpdate);
+    }
+
+    //PUT methods
+    @Override
+    public Product ReplaceProduct(Long id, Product product)
+    {
+        return null;
     }
 
 

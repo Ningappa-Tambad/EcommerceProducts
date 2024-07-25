@@ -64,32 +64,34 @@ public class ProductController
 
     }
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable("id") Long productId,@RequestBody Product product)
-    {
-
-        ResponseEntity<Product> responseEntity = null;
-        try {
-
-            responseEntity = new ResponseEntity<>(
-                    product,
-                    HttpStatus.OK
-            );
-
-        }
-        catch (RuntimeException e)
-        {
-            responseEntity = new ResponseEntity<>(
-                    HttpStatus.NOT_FOUND);
-        }
-
-        return responseEntity;
-
-    }
+//    @PatchMapping("/{id}")
+//    public ResponseEntity<Product> updateProduct(@PathVariable("id") Long productId,@RequestBody Product product)
+//    {
+//
+//        ResponseEntity<Product> responseEntity = null;
+//        try {
+//
+//            responseEntity = new ResponseEntity<>(
+//                    product,
+//                    HttpStatus.OK
+//            );
+//
+//        }
+//        catch (RuntimeException e)
+//        {
+//            responseEntity = new ResponseEntity<>(
+//                    HttpStatus.NOT_FOUND);
+//        }
+//
+//        return responseEntity;
+//
+//    }
     @PutMapping("/{id}")
     public Product replaceProduct(@PathVariable("id") Long productId,@RequestBody Product product)
     {
-        return null;
+
+
+        return productService.ReplaceProduct(productId, product);
     }
 
     @ExceptionHandler(ArithmeticException.class)
@@ -117,6 +119,13 @@ public class ProductController
     }
 
 
+
+    @PatchMapping("/{id}")
+    public Product updateDbProduct(@PathVariable("id") Long id,@RequestBody Product product) throws ProductNotFoundException {
+
+       return productService.UpdateDbProduct(id,product);
+
+    }
 
 
 }

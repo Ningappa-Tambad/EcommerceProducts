@@ -1,6 +1,7 @@
 package com.springacademy.productservicejune24.models;
 
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;
@@ -13,8 +14,8 @@ public class Product extends BaseModel {
 
    // private long id;
     private String title;
-    private double price;
-    @ManyToOne
+    private Double price;
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Category category;
 
 
